@@ -18,6 +18,9 @@ return {
             vertright = "┣",
             verthoriz = "╋",
           },
+          foldexpr = "nvim_treesitter#foldexpr()",
+          foldmethod = "expr",
+          foldlevel = 1,
           formatoptions = "cqnj", -- This is a sequence of letters which describes how automatic formatting is to be done
           -- iskeyword = "@,48-57,192-255", -- treats words with `_` as multiple words
           scrolloff = 4, -- minimal number of screen lines to keep above and below the cursor

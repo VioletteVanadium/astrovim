@@ -10,6 +10,14 @@ return {
   opts = {
     -- change colorscheme
     colorscheme = "catppuccin",
+    -- Configure how folding works
+    -- folding = {
+    --   -- whether a buffer should have folding can be true/false for global enable/disable or fun(bufnr:integer):boolean
+    --   -- enabled = function(bufnr) return require("astrocore.buffer").is_valid(bufnr) end,
+    --   enabled = true,
+    --   -- a priority list of fold methods to try using, available methods are "lsp", "treesitter", and "indent"
+    --   methods = { "lsp", "treesitter", "indent" },
+    -- },
     status = {
       separators = {
         left = { "", "" }, -- separator for the left side of the statusline
