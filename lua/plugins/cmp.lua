@@ -1,5 +1,8 @@
 return { -- override nvim-cmp plugin
   "hrsh7th/nvim-cmp",
+  -- dependencies = {
+  --   "hrsh7th/cmp-nvim-lsp-signature-help"
+  -- },
   -- override the options table that is used in the `require("cmp").setup()` call
   opts = function(_, opts)
     -- opts parameter is the default options table
@@ -12,6 +15,7 @@ return { -- override nvim-cmp plugin
       { name = "luasnip", priority = 750 },
       { name = "buffer", priority = 500 },
       { name = "path", priority = 250 },
+      -- { name = "nvim_lsp_signature_help" },
     }
     opts.formatting.format = lspkind.cmp_format {
       mode = "symbol",

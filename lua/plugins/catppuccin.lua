@@ -5,7 +5,7 @@ return {
   ---@type CatppuccinOptions
   opts = {
     transparent_background = false,
-    term_colors = false,
+    term_colors = true,
     integrations = {
       aerial = true,
       alpha = true,

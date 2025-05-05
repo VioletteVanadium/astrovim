@@ -5,14 +5,16 @@
 ---@type LazySpec
 return {
   "AstroNvim/astrocommunity",
-  { import = "astrocommunity.recipes.heirline-nvchad-statusline" },
+  { import = "astrocommunity.bars-and-lines.bufferline-nvim" },
+  { import = "astrocommunity.bars-and-lines.dropbar-nvim" },
+  -- { import = "astrocommunity.recipes.heirline-nvchad-statusline" },
+  -- { import = "astrocommunity.bars-and-lines.lualine-nvim" },
   { import = "astrocommunity.recipes.telescope-lsp-mappings" },
+  { import = "astrocommunity.recipes.telescope-nvim-snacks" },
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.pack.lua" },
-  { import = "astrocommunity.motion.nvim-surround" },
-  { import = "astrocommunity.completion.cmp-cmdline" },
   { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
+  { import = "astrocommunity.completion.cmp-cmdline" },
+  { import = "astrocommunity.motion.nvim-surround" },
   { import = "astrocommunity.motion.leap-nvim" },
-  { import = "astrocommunity.lsp.lsp-signature-nvim" },
-  { import = "astrocommunity.bars-and-lines.bufferline-nvim" },
 }

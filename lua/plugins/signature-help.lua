@@ -4,7 +4,7 @@ return {
   opts = {
     features = {
       -- signature_help = true, -- enable automatic signature help popup globally on startup
-      -- inlay_hints = true,
+      inlay_hints = true,
     },
   },
 }

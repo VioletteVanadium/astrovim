@@ -11,6 +11,7 @@ return {
         maps.n["zr"] = { function() require("ufo").openFoldsExceptKinds() end, desc = "Fold less" }
         maps.n["zm"] = { function() require("ufo").closeFoldsWith() end, desc = "Fold more" }
         maps.n["zp"] = { function() require("ufo").peekFoldedLinesUnderCursor() end, desc = "Peek fold" }
+        -- maps.n["zx"] = { "zMzO", desc = "Close all but current fold" }
 
         local opt = opts.options.opt
         opt.foldcolumn = "1"
@@ -53,9 +54,14 @@ return {
       end
 
       return (filetype == "" or buftype == "nofile") and "indent" -- only use indent until a file is opened
-        or function(bufnr)
-          return require("ufo").getFolds(bufnr, "treesitter")
-        end
+        or function(bufnr) return require("ufo").getFolds(bufnr, "treesitter") end
+      -- return (filetype == "" or buftype == "nofile") and "indent" -- only use indent until a file is opened
+      --   or function(bufnr)
+      --     return require("ufo")
+      --       .getFolds(bufnr, "lsp")
+      --       :catch(function(err) return handleFallbackException(bufnr, err, "treesitter") end)
+      --       :catch(function(err) return handleFallbackException(bufnr, err, "indent") end)
+      --   end
     end,
     fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
       local newVirtText = {}

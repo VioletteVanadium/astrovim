@@ -7,7 +7,7 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function() vim.opt_local.formatoptions:remove { "o" } end,
 })
 
--- vim.g._ts_force_sync_parsing = true
+vim.g._ts_force_sync_parsing = true
 
 local treesitter_parsers = require "nvim-treesitter.parsers"
 local treesitter_query = require "vim.treesitter.query"
