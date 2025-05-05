@@ -13,7 +13,7 @@ return {
           ["H"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
 
           -- this is useful for naming menus
-          ["<Leader>b"] = { name = "Buffers" },
+          ["<Leader>b"] = { desc = "Buffers" },
           ["<Leader>bd"] = {
             function()
               require("astroui.status.heirline").buffer_picker(
@@ -32,12 +32,6 @@ return {
             end,
             desc = "Pick to close",
           },
-
-          -- toggle markdown render
-          ["<Leader>um"] = {
-            function() require("render-markdown").toggle() end,
-            desc = "Toggle markdown render",
-          },
         },
         t = {
           -- setting a mapping to false will disable it
@@ -45,26 +39,5 @@ return {
         },
       },
     },
-  },
-  {
-    "AstroNvim/astrolsp",
-    ---@type AstroLSPOpts
-    opts = {
-      mappings = {
-        n = {
-          -- this mapping will only be set in buffers with an LSP attached
-          K = {
-            function() vim.lsp.buf.hover() end,
-            desc = "Hover symbol details",
-          },
-          -- condition for only server with declaration capabilities
-          gD = {
-            function() vim.lsp.buf.declaration() end,
-            desc = "Declaration of current symbol",
-            cond = "textDocument/declaration",
-          },
-        },
-      },
-    },
-  },
+  }
 }
