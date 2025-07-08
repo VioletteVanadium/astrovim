@@ -9,28 +9,34 @@ return {
           -- second key is the lefthand side of the map
 
           -- navigate buffer tabs
-          ["L"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
-          ["H"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+          ["L"] = { function() require("bufferline").cycle(1) end, desc = "Next buffer" },
+          ["H"] = { function() require("bufferline").cycle(-1) end, desc = "Previous buffer" },
 
           -- this is useful for naming menus
           ["<Leader>b"] = { desc = "Buffers" },
-          ["<Leader>bd"] = {
-            function()
-              require("astroui.status.heirline").buffer_picker(
-                function(bufnr) require("astrocore.buffer").close(bufnr) end
-              )
-            end,
-            desc = "Close buffer from tabline",
-          },
+          ["<Leader>bc"] = { function() require("bufferline").unpin_and_close() end, desc = "Close current buffer" },
+          ["<Leader>bd"] = { "<cmd>BufferLinePickClose<cr>", desc = "Close buffer using picker" },
+          ["<Leader>bD"] = { "<cmd>BufferLineCloseOthers<cr>", desc = "Close all other visible buffers" },
+          ["<Leader>bh"] = { "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer left" },
+          ["<Leader>bl"] = { "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer right" },
+          ["<Leader>br"] = { "<cmd>BufferLineTabRename<cr>", desc = "Tab rename" },
+          ["<Leader>bg"] = { desc = "Group commands" },
+          ["<Leader>bgt"] = { "<cmd>BufferLineGroupToggle Tests", desc = "Toggle Tests group" },
+          ["<Leader>bgd"] = { "<cmd>BufferLineGroupToggle Docs", desc = "Toggle Docs group" },
+          ["<Leader>bgT"] = { "<cmd>BufferLineGroupClose Tests", desc = "Close Tests group" },
+          ["<Leader>bgD"] = { "<cmd>BufferLineGroupClose Docs", desc = "Close Docs group" },
 
-          -- mappings seen under group name "Buffer"
-          ["<Leader>bD"] = {
+          -- override sorting for buffer picker
+          ["<Leader>fb"] = {
             function()
-              require("astroui.status").heirline.buffer_picker(
-                function(bufnr) require("astrocore.buffer").close(bufnr) end
-              )
+              -- require("snacks").picker.buffers { sort_lastused = false, sort = { fields = { "desc:score", "file", "idx" } } }
+              require("snacks").picker.smart {
+                multi = { "buffers" },
+                format = "file",
+                matcher = { cwd_bonus = false, frecency = true, sort_empty = true },
+              }
             end,
-            desc = "Pick to close",
+            desc = "Find buffers",
           },
         },
         t = {
@@ -39,5 +45,5 @@ return {
         },
       },
     },
-  }
+  },
 }

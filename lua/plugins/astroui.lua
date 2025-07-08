@@ -11,7 +11,11 @@ return {
     -- change colorscheme
     colorscheme = "catppuccin",
     -- configure folding
-    folding = { methods = { "treesitter", "lsp", "indent" } },
+    folding = {
+      enabled = function(bufnr) return vim.api.nvim_get_option_value("filetype", { buf = bufnr }) ~= "python" end,
+      methods = { "lsp", "treesitter", "indent" },
+    },
+    -- folding = { methods = { "treesitter", "lsp", "indent" } },
     -- add new user interface icon
     icons = {
       VimIcon = "",

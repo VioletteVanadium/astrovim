@@ -7,6 +7,25 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function() vim.opt_local.formatoptions:remove { "o" } end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "python",
+  callback = function()
+    vim.cmd [[
+      call SimpylFold#BufferInit()
+      setlocal foldexpr=SimpylFold#FoldExpr(v:lnum)
+      setlocal foldmethod=expr
+
+      augroup SimpylFold
+        autocmd TextChanged,InsertLeave <buffer> call SimpylFold#Recache()
+      augroup END
+
+      if exists('g:SimpylFold_docstring_preview') && g:SimpylFold_docstring_preview
+        setlocal foldtext=foldtext()\ .\ SimpylFold#FoldText()
+      endif
+    ]]
+  end,
+})
+
 vim.g._ts_force_sync_parsing = true
 
 local treesitter_parsers = require "nvim-treesitter.parsers"
