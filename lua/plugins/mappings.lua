@@ -26,18 +26,26 @@ return {
           ["<Leader>bgT"] = { "<cmd>BufferLineGroupClose Tests", desc = "Close Tests group" },
           ["<Leader>bgD"] = { "<cmd>BufferLineGroupClose Docs", desc = "Close Docs group" },
 
-          -- override sorting for buffer picker
-          ["<Leader>fb"] = {
-            function()
-              -- require("snacks").picker.buffers { sort_lastused = false, sort = { fields = { "desc:score", "file", "idx" } } }
-              require("snacks").picker.smart {
-                multi = { "buffers" },
-                format = "file",
-                matcher = { cwd_bonus = false, frecency = true, sort_empty = true },
-              }
-            end,
-            desc = "Find buffers",
-          },
+          -- -- override sorting for buffer picker
+          -- ["<Leader>fb"] = {
+          --   function()
+          --     -- require("snacks").picker.buffers { sort_lastused = false, sort = { fields = { "desc:score", "file", "idx" } } }
+          --     require("snacks").picker.smart {
+          --       multi = { "buffers" },
+          --       format = "file",
+          --       matcher = { cwd_bonus = false, frecency = true, sort_empty = true },
+          --     }
+          --   end,
+          --   desc = "Find buffers",
+          -- },
+          -- ["<Leader>fw"] = {
+          --   function()
+          --     require("snacks").picker.grep {
+          --       sort = { fields = { "#text", "file" } },
+          --     }
+          --   end,
+          --   desc = "Find words",
+          -- },
         },
         t = {
           -- setting a mapping to false will disable it

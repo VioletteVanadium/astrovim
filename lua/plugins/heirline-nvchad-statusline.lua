@@ -7,6 +7,18 @@ return {
       hl = { fg = "fg", bg = "bg" },
       -- each element following is a component in astroui.status module
 
+      status.component.cmd_info {
+        surround = {
+          separator = "center",
+          color = "cmd_info_bg",
+          condition = function()
+            local condition = require "astroui.status.condition"
+            return condition.is_hlsearch() or condition.is_macro_recording() or condition.is_statusline_showcmd()
+          end,
+        },
+        condition = function() return vim.opt.cmdheight:get() == 0 end,
+        hl = function() return require("astroui.status.hl").get_attributes "cmd_info" end,
+      },
       -- add the vim mode component
       status.component.mode {
         -- enable mode text with padding as well as an icon before it
@@ -18,17 +30,7 @@ return {
           -- it's a left element, so use the left separator
           separator = "left",
           -- set the color of the surrounding based on the current mode using astronvim.utils.status module
-          color = function() return { main = status.hl.mode_bg(), right = "blank_bg" } end,
-        },
-      },
-      -- we want an empty space here so we can use the component builder to make a new section with just an empty string
-      status.component.builder {
-        { provider = "" },
-        -- define the surrounding separator and colors to be used inside of the component
-        -- and the color to the right of the separated out section
-        surround = {
-          separator = "left",
-          color = { main = "blank_bg", right = "file_info_bg" },
+          color = function() return { main = status.hl.mode_bg(), right = "file_info_bg" } end,
         },
       },
       -- add a section for the currently opened file information

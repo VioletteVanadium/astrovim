@@ -54,6 +54,11 @@ return {
           statusline = false,
         },
       },
+      providers = {
+        lsp_client_names = {
+          truncate = 1.0,
+        },
+      },
     },
   },
 }

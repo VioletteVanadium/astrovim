@@ -1,5 +1,7 @@
 return {
-  "tmhedberg/SimpylFold",
-  name = "SimpylFold",
+  "Konfekt/FastFold",
   ft = "python",
+  dependencies = {
+    "tmhedberg/SimpylFold",
+  },
 }
