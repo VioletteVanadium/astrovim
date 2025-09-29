@@ -8,14 +8,17 @@ return {
     opts.formatting.timeout_ms = 5000
 
     opts.servers = opts.servers or {}
-    table.insert(opts.servers, "jedi_language_server")
+    -- table.insert(opts.servers, "jedi_language_server")
 
     local lspconfig = require "lspconfig"
-
-    lspconfig.jedi_language_server.setup {
-      init_options = {
-        completion = {
-          disableSnippets = true,
+    lspconfig.basedpyright.setup {
+      settings = {
+        basedpyright = {
+          disableOrganizeImports = true,
+          analysis = {
+            autoImportCompletions = true,
+            useTypingExtensions = true,
+          },
         },
       },
     }

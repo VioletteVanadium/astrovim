@@ -18,6 +18,10 @@ return {
         accept = {
           auto_brackets = { enabled = false },
         },
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 100,
+        },
       },
     },
   },
@@ -44,25 +48,20 @@ return {
         "--config-file",
         os.getenv "HOME" .. "/.mypy.ini",
       }
-      local dmypy = require("lint").linters.dmypy
-      dmypy.args = {
-        "run",
-        "--timeout",
-        "50000",
-        "--",
-        "--show-column-numbers",
-        "--show-error-end",
-        "--hide-error-context",
-        "--no-color-output",
-        "--no-error-summary",
-        "--no-pretty",
-        "--config-file",
-        os.getenv "HOME" .. "/.mypy.ini",
+      local pylint = require("lint").linters.pylint
+      pylint.args = {
+        "-f",
+        "json",
+        "--errors-only",
+        "--ignored-modules=sh",
+        "--disable=no-member,no-self-argument",
+        "--from-stdin",
+        function() return vim.api.nvim_buf_get_name(0) end,
       }
       require("lint").linters_by_ft = {
         python = { "mypy", "ruff" },
       }
-      vim.api.nvim_create_autocmd({ "LspAttach", "InsertLeave", "TextChanged", "BufWritePost" }, {
+      vim.api.nvim_create_autocmd({ "LspAttach", "InsertLeave", "BufWritePost" }, {
         callback = function() require("lint").try_lint() end,
       })
     end,
@@ -81,7 +80,7 @@ return {
       },
       format_on_save = {
         -- These options will be passed to conform.format()
-        timeout_ms = 500,
+        timeout_ms = 5000,
         lsp_format = "fallback",
       },
     },
@@ -91,7 +90,7 @@ return {
     event = "User AstroFile",
     main = "lsp_signature",
     opts = {
-      floating_window = false,
+      floating_window = true,
       hint_enable = true,
       hint_prefix = {
         above = "↙ ",

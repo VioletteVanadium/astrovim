@@ -2,6 +2,8 @@
 -- things like custom filetypes. This just pure lua so anything that doesn't
 -- fit in the normal config locations above can go here
 
+vim.o.termguicolors = true
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function() vim.opt_local.formatoptions:remove { "o" } end,

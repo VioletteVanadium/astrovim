@@ -6,8 +6,6 @@ return {
       mappings = {
         -- first key is the mode
         n = {
-          -- second key is the lefthand side of the map
-
           -- navigate buffer tabs
           ["L"] = { function() require("bufferline").cycle(1) end, desc = "Next buffer" },
           ["H"] = { function() require("bufferline").cycle(-1) end, desc = "Previous buffer" },
@@ -25,6 +23,9 @@ return {
           ["<Leader>bgd"] = { "<cmd>BufferLineGroupToggle Docs", desc = "Toggle Docs group" },
           ["<Leader>bgT"] = { "<cmd>BufferLineGroupClose Tests", desc = "Close Tests group" },
           ["<Leader>bgD"] = { "<cmd>BufferLineGroupClose Docs", desc = "Close Docs group" },
+
+          -- idk why this is missing
+          ["<Leader>fn"] = { function() require("snacks").picker.notifications() end, desc = "Find notifications" },
 
           -- -- override sorting for buffer picker
           -- ["<Leader>fb"] = {
