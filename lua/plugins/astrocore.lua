@@ -26,7 +26,7 @@ return {
     diagnostics = {
       virtual_text = { current_line = true },
       virtual_lines = { current_line = true }, -- but allow it to be toggled as desired
-      underline = true,
+      underline = false,
       severity_sort = true,
     },
     autocmds = {
