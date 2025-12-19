@@ -76,3 +76,12 @@ if treesitter_parsers.has_parser "lua" then
   ]]
   treesitter_query.set("lua", "folds", folds_query)
 end
+if treesitter_parsers.has_parser "typescript" then
+  local folds_query = [[
+    [
+      (function_definition)
+      (class_definition)
+    ] @fold
+  ]]
+  treesitter_query.set("typescript", "folds", folds_query)
+end
