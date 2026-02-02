@@ -32,7 +32,7 @@ vim.g._ts_force_sync_parsing = true
 
 local treesitter_parsers = require "nvim-treesitter.parsers"
 local treesitter_query = require "vim.treesitter.query"
---[[ Possible values:
+--[[ Possible values (python):
 (function_definition)
 (class_definition)
 
@@ -76,12 +76,51 @@ if treesitter_parsers.has_parser "lua" then
   ]]
   treesitter_query.set("lua", "folds", folds_query)
 end
-if treesitter_parsers.has_parser "typescript" then
+--[[ Possible values (typescript)
+  (interface_declaration)
+  (internal_module)
+  (function_expression)
+  (function_declaration)
+  (class_declaration)
+  (method_definition)
+  (generator_function)
+  (generator_function_declaration)
+  (arrow_function)
+
+  (type_alias_declaration)
+  (enum_declaration)
+
+  (import_statement)+
+  (arguments)
+
+  (for_in_statement)
+  (for_statement)
+  (while_statement)
+  (do_statement)
+  (with_statement)
+  (switch_statement)
+  (switch_case)
+  (switch_default)
+  (if_statement)
+  (try_statement)
+  (catch_clause)
+
+  (array)
+  (object)
+--]]
+if treesitter_parsers.has_parser "tsx" then
   local folds_query = [[
     [
-      (function_definition)
-      (class_definition)
+      (interface_declaration)
+      (internal_module)
+      (function_expression)
+      (function_declaration)
+      (class_declaration)
+      (method_definition)
+      (generator_function)
+      (generator_function_declaration)
+      (arrow_function)
     ] @fold
   ]]
-  treesitter_query.set("typescript", "folds", folds_query)
+  treesitter_query.set("tsx", "folds", folds_query)
 end

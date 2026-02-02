@@ -7,7 +7,32 @@ return {
   },
   config = function(_, opts)
     require("astrolsp").setup(opts)
-    vim.lsp.enable "zuban"
+
+    -- vim.lsp.config("ty", {
+    --   cmd = { "ty", "server" },
+    --   filetypes = { "python" },
+    --   root_markers = { "ty.toml", "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
+    -- })
+    -- vim.lsp.enable("ty", true)
+
+    vim.lsp.config("zuban", {
+      cmd = { "zuban", "server" },
+      filetypes = { "python" },
+      root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
+    })
+    vim.lsp.enable("zuban", true)
+
+    vim.lsp.config("basedpyright", {
+      settings = {
+        basedpyright = {
+          disableOrganizeImports = true,
+          analysis = {
+            typeCheckingMode = "off",
+            autoImportCompletions = true,
+          },
+        },
+      },
+    })
   end,
   dependencies = {
     {
@@ -16,7 +41,8 @@ return {
         ensure_installed = {
           "typescript-language-server",
           "eslint_d",
-          "zuban",
+          "ty",
+          "basedpyright",
         },
       },
     },
@@ -45,7 +71,7 @@ return {
           function() return vim.api.nvim_buf_get_name(0) end,
         }
         require("lint").linters_by_ft = {
-          python = { "mypy", "ruff" },
+          python = { "ruff", "mypy" },
         }
         vim.api.nvim_create_autocmd({ "LspAttach", "InsertLeave", "BufWritePost" }, {
           callback = function() require("lint").try_lint() end,
@@ -106,7 +132,17 @@ return {
         sources = {
           providers = {
             path = { score_offset = 3 },
-            lsp = { score_offset = 0 },
+            lsp = {
+              score_offset = 0,
+              fallbacks = { "buffer" },
+              -- Filter text items from the LSP provider, since we have the buffer provider for that
+              transform_items = function(_, items)
+                return vim.tbl_filter(
+                  function(item) return item.kind ~= require("blink.cmp.types").CompletionItemKind.Text end,
+                  items
+                )
+              end,
+            },
             snippets = { score_offset = -1 },
             buffer = { score_offset = -3 },
           },
