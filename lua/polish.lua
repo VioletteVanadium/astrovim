@@ -10,6 +10,11 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
+  pattern = "codecompanion",
+  command = "Markview attach",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
   pattern = "python",
   callback = function()
     vim.cmd [[
@@ -113,14 +118,57 @@ if treesitter_parsers.has_parser "tsx" then
     [
       (interface_declaration)
       (internal_module)
-      (function_expression)
       (function_declaration)
       (class_declaration)
       (method_definition)
-      (generator_function)
       (generator_function_declaration)
       (arrow_function)
     ] @fold
   ]]
   treesitter_query.set("tsx", "folds", folds_query)
+  treesitter_query.set("typescript", "folds", folds_query)
+  treesitter_query.set("typescriptreact", "folds", folds_query)
 end
+
+vim.cmd [[
+function! Goto_cfile(theremotion, heremotion = "e")
+  let cfile = expand("<cfile>")
+
+  let starting_window = nvim_win_get_number(0)
+
+  " If there's no previous window, create a new one
+  wincmd p
+  if nvim_win_get_number(0) ==# starting_window
+    execute(a:theremotion." ".cfile)
+  else
+    execute(a:heremotion." ".cfile)
+  endif
+endfunction
+
+
+function! Goto_cWORD(theremotion, heremotion = "e")
+  let cword = expand("<cWORD>")
+  let st = match(cword, '\v\f+(:\d+)?')
+  let end = matchend(cword, '\v\f+(:\d+)?')
+
+  if end !=# -1
+    let cword = cword[st:end - 1]
+  endif
+
+  let bits = split(cword, ':')
+
+  let starting_window = nvim_win_get_number(0)
+
+  " If there's no previous window, create a new one
+  wincmd p
+  if nvim_win_get_number(0) ==# starting_window
+    execute(a:theremotion." ".bits[0])
+  else
+    execute(a:heremotion." ".bits[0])
+  endif
+
+  if len(bits) ># 1
+    execute(bits[1])
+  endif
+endfunction
+]]

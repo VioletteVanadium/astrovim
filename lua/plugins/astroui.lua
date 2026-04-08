@@ -13,7 +13,7 @@ return {
     -- configure folding
     folding = {
       enabled = function(bufnr) return vim.api.nvim_get_option_value("filetype", { buf = bufnr }) ~= "python" end,
-      methods = { "lsp", "treesitter", "indent" },
+      methods = { "treesitter" },
     },
     -- folding = { methods = { "treesitter", "lsp", "indent" } },
     -- add new user interface icon

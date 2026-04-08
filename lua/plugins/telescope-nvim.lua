@@ -57,10 +57,6 @@ return {
         maps.n["<Leader>fh"] = { function() require("telescope.builtin").help_tags() end, desc = "Find help" }
         maps.n["<Leader>fk"] = { function() require("telescope.builtin").keymaps() end, desc = "Find keymaps" }
         maps.n["<Leader>fm"] = { function() require("telescope.builtin").man_pages() end, desc = "Find man" }
-        if is_available "nvim-notify" then
-          maps.n["<Leader>fn"] =
-            { function() require("telescope").extensions.notify.notify() end, desc = "Find notifications" }
-        end
         maps.n["<Leader>fo"] = { function() require("telescope.builtin").oldfiles() end, desc = "Find history" }
         maps.n["<Leader>fr"] = { function() require("telescope.builtin").registers() end, desc = "Find registers" }
         maps.n["<Leader>ft"] = {

@@ -8,70 +8,36 @@ return {
   config = function(_, opts)
     require("astrolsp").setup(opts)
 
-    -- vim.lsp.config("ty", {
-    --   cmd = { "ty", "server" },
-    --   filetypes = { "python" },
-    --   root_markers = { "ty.toml", "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
-    -- })
-    -- vim.lsp.enable("ty", true)
+    if vim.fn.executable "ty" == 1 then
+      vim.lsp.config("ty", {
+        cmd = { "ty", "server" },
+        filetypes = { "python" },
+        root_markers = { "ty.toml", "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
+      })
+      vim.lsp.enable "ty"
+    end
 
-    vim.lsp.config("zuban", {
-      cmd = { "zuban", "server" },
-      filetypes = { "python" },
-      root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
-    })
-    vim.lsp.enable("zuban", true)
-
-    vim.lsp.config("basedpyright", {
-      settings = {
-        basedpyright = {
-          disableOrganizeImports = true,
-          analysis = {
-            typeCheckingMode = "off",
-            autoImportCompletions = true,
-          },
+    if vim.fn.executable "ruff" == 1 then
+      vim.lsp.config("ruff", {
+        init_options = {
+          settings = { organizeImports = false, fixAll = false },
         },
-      },
-    })
+      })
+      vim.lsp.enable "ruff"
+    end
+
+    if vim.fn.executable "typescript-language-server" == 1 then vim.lsp.enable "ts_ls" end
+
   end,
   dependencies = {
     {
-      "WhoIsSethDaniel/mason-tool-installer.nvim",
-      opts = {
-        ensure_installed = {
-          "typescript-language-server",
-          "eslint_d",
-          "ty",
-          "basedpyright",
-        },
-      },
-    },
-    {
       "mfussenegger/nvim-lint",
       config = function()
-        local mypy = require("lint").linters.mypy
-        mypy.args = {
-          "--show-column-numbers",
-          "--show-error-end",
-          "--hide-error-context",
-          "--no-color-output",
-          "--no-error-summary",
-          "--no-pretty",
-          "--config-file",
-          os.getenv "HOME" .. "/.mypy.ini",
-        }
-        local pylint = require("lint").linters.pylint
-        pylint.args = {
-          "-f",
-          "json",
-          "--errors-only",
-          "--ignored-modules=sh",
-          "--disable=no-member,no-self-argument",
-          "--from-stdin",
-          function() return vim.api.nvim_buf_get_name(0) end,
-        }
         require("lint").linters_by_ft = {
-          python = { "ruff", "mypy" },
+          javascript = { "eslint_d" },
+          javascriptreact = { "eslint_d" },
+          typescript = { "eslint_d" },
+          typescriptreact = { "eslint_d" },
         }
         vim.api.nvim_create_autocmd({ "LspAttach", "InsertLeave", "BufWritePost" }, {
           callback = function() require("lint").try_lint() end,
@@ -115,7 +81,7 @@ return {
           -- You can customize some of the format options for the filetype (:help conform.format)
           rust = { "rustfmt" },
           -- Conform will run the first available formatter
-          ["_"] = { "prettier", "prettierd", stop_after_first = true },
+          ["_"] = { "prettier", lsp_format = "fallback" },
         },
         default_format_opts = { timeout_ms = 5000, lsp_format = "fallback" },
         format_on_save = function(bufnr)
@@ -131,9 +97,9 @@ return {
       opts = {
         sources = {
           providers = {
-            path = { score_offset = 3 },
+            snippets = { score_offset = 10 },
             lsp = {
-              score_offset = 0,
+              score_offset = 10,
               fallbacks = { "buffer" },
               -- Filter text items from the LSP provider, since we have the buffer provider for that
               transform_items = function(_, items)
@@ -143,8 +109,8 @@ return {
                 )
               end,
             },
-            snippets = { score_offset = -1 },
-            buffer = { score_offset = -3 },
+            path = { score_offset = 5 },
+            buffer = { score_offset = 0 },
           },
         },
         completion = {
@@ -157,6 +123,12 @@ return {
           documentation = {
             auto_show = true,
             auto_show_delay_ms = 100,
+          },
+        },
+        signature = {
+          enabled = true,
+          trigger = {
+            show_on_insert = true,
           },
         },
       },
