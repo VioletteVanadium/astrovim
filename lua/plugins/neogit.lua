@@ -16,6 +16,13 @@ return {
         maps.n[prefix .. "p"] = { ":Neogit cwd=", desc = "Open Neogit Override CWD" }
         maps.n[prefix .. "k"] = { ":Neogit kind=", desc = "Open Neogit Override Kind" }
 
+        -- Diffview review keymaps
+        maps.n[prefix .. "v"] = { "<Cmd>DiffviewOpen<CR>", desc = "Diffview: working tree vs HEAD" }
+        maps.n[prefix .. "V"] = { "<Cmd>DiffviewClose<CR>", desc = "Diffview: close" }
+        maps.n[prefix .. "B"] = { ":DiffviewOpen origin/master...HEAD", desc = "Diffview: review branch (edit base, then <CR>)" }
+        maps.n[prefix .. "H"] = { "<Cmd>DiffviewFileHistory<CR>", desc = "Diffview: repo file history" }
+        maps.n[prefix .. "m"] = { "<Cmd>DiffviewFileHistory %<CR>", desc = "Diffview: current file history" }
+
         -- Gitsigns defaults (disable or remap as needed)
         -- maps.n[prefix .. "l"] = { function() require("gitsigns").blame_line() end, desc = "View Git blame" }
         -- maps.n[prefix .. "L"] = { function() require("gitsigns").blame_line { full = true } end, desc = "View full Git blame" }
