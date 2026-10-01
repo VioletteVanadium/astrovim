@@ -21,15 +21,24 @@ return {
           formatoptions = "cqnj", -- This is a sequence of letters which describes how automatic formatting is to be done
           textwidth = 100,
           -- iskeyword = "@,48-57,192-255", -- treats words with `_` as multiple words
-          scrolloff = 4, -- minimal number of screen lines to keep above and below the cursor
+          scrolloff = 999, -- keep the current line vertically centered (typewriter scrolling); lower this for a fixed top/bottom margin instead
           showbreak = "↳ ", -- wrap indicator
           timeoutlen = 800,
           wrap = true, -- turn on line wrapping
         },
-        g = { -- vim.g.<key>
-          -- configure global vim variables (vim.g)
-          -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
-          -- This can be found in the `lua/lazy_setup.lua` file
+        g = {
+          clipboard = {
+            name = "OSC 52 through tmux",
+            copy = {
+              ["+"] = { "/home/victoria/.local/bin/tmux-copy-osc52" },
+              ["*"] = { "/home/victoria/.local/bin/tmux-copy-osc52" },
+            },
+            paste = {
+              ["+"] = { "sh", "-c", "tmux refresh-client -l && sleep 0.05 && tmux save-buffer -" },
+              ["*"] = { "sh", "-c", "tmux refresh-client -l && sleep 0.05 && tmux save-buffer -" },
+            },
+            cache_enabled = 0,
+          },
         },
       },
     },

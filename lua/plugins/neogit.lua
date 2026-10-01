@@ -19,7 +19,19 @@ return {
         -- Diffview review keymaps
         maps.n[prefix .. "v"] = { "<Cmd>DiffviewOpen<CR>", desc = "Diffview: working tree vs HEAD" }
         maps.n[prefix .. "V"] = { "<Cmd>DiffviewClose<CR>", desc = "Diffview: close" }
-        maps.n[prefix .. "B"] = { ":DiffviewOpen origin/master...HEAD", desc = "Diffview: review branch (edit base, then <CR>)" }
+        maps.n[prefix .. "B"] = {
+          function()
+            local default = vim.fn.systemlist("git symbolic-ref --quiet --short refs/remotes/origin/HEAD")[1]
+            if vim.v.shell_error ~= 0 or not default or default == "" then default = "origin/master" end
+            local base = vim.fn.systemlist({ "git", "merge-base", default, "HEAD" })[1]
+            if vim.v.shell_error ~= 0 or not base or base == "" then
+              vim.notify("merge-base " .. default .. "..HEAD failed", vim.log.levels.ERROR)
+              return
+            end
+            vim.cmd("DiffviewOpen " .. base .. "..HEAD")
+          end,
+          desc = "Diffview: review branch vs merge-base with origin default",
+        }
         maps.n[prefix .. "H"] = { "<Cmd>DiffviewFileHistory<CR>", desc = "Diffview: repo file history" }
         maps.n[prefix .. "m"] = { "<Cmd>DiffviewFileHistory %<CR>", desc = "Diffview: current file history" }
 

@@ -12,6 +12,9 @@ return {
     "folke/snacks.nvim",
   },
   opts = {
+    env = {
+      NVIM = vim.v.servername,
+    },
     terminal = {
       provider = "snacks",
       auto_close = false,

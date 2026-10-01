@@ -1,1 +1,3 @@
 ./lazy-lock.json
+.nvimlog
+lazy-lock.json

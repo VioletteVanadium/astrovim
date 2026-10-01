@@ -6,6 +6,16 @@ return {
       mappings = {
         t = {
           ["<esc>"] = false,
+          -- Send newline directly to the terminal job so Ctrl-J remains
+          -- available for tmux pane navigation.
+          ["<S-CR>"] = {
+            function()
+              local job = vim.b.terminal_job_id
+              if job then vim.api.nvim_chan_send(job, "\n") end
+            end,
+            desc = "Newline in a terminal app",
+          },
+          ["<M-CR>"] = { "<C-j>", desc = "Newline in a terminal app" },
         },
         n = {
           -- buffer navigation

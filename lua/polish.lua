@@ -10,6 +10,15 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.formatlistpat = [[^\s*[-*+]\s\+\|^\s*\d\+[\]:.)}\t ]\s*]]
+    vim.opt_local.formatoptions:append "n"
+    vim.opt_local.formatoptions:remove "t"
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
   pattern = "codecompanion",
   command = "Markview attach",
 })

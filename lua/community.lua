@@ -7,7 +7,6 @@ return {
   "AstroNvim/astrocommunity",
   { import = "astrocommunity.bars-and-lines.dropbar-nvim" },
   { import = "astrocommunity.colorscheme.catppuccin" },
-  { import = "astrocommunity.completion.cmp-cmdline" },
   { import = "astrocommunity.git.diffview-nvim" },
   { import = "astrocommunity.lsp.nvim-lsp-file-operations" },
   { import = "astrocommunity.motion.grapple-nvim" },

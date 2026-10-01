@@ -18,6 +18,21 @@ return {
       provider = "auto",
       auto_close = false,
       snacks_win_opts = {
+        keys = {
+          -- claudecode.nvim's default types "\" then <CR> 10ms later, Claude
+          -- Code's old newline escape, which it no longer honors. Write 0x0A
+          -- straight to the job instead: that's what its chat:newline binding
+          -- listens for, and it dodges nvim's terminal-mode <C-j> mapping.
+          claude_new_line = {
+            "<S-CR>",
+            function()
+              local job = vim.b.terminal_job_id
+              if job then vim.api.nvim_chan_send(job, "\n") end
+            end,
+            mode = "t",
+            desc = "New line",
+          },
+        },
         position = "bottom",
         height = 0.5,
         width = 1.0,

@@ -6,7 +6,14 @@ return {
     formatting = { disabled = true },
   },
   config = function(_, opts)
-    require("astrolsp").setup(opts)
+    local astrolsp = require("astrolsp")
+    astrolsp.setup(opts)
+
+    -- These servers are enabled directly via the native vim.lsp API rather than through
+    -- astrolsp.lsp_setup, so AstroLSP never wires its on_attach into them. Without on_attach,
+    -- none of the <leader>l* LSP keymaps (rename, code action, references, ...) get created in
+    -- their buffers. Apply on_attach ourselves on LspAttach for these clients.
+    local native_servers = {}
 
     if vim.fn.executable "ty" == 1 then
       vim.lsp.config("ty", {
@@ -15,6 +22,7 @@ return {
         root_markers = { "ty.toml", "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
       })
       vim.lsp.enable "ty"
+      native_servers.ty = true
     end
 
     if vim.fn.executable "ruff" == 1 then
@@ -24,10 +32,22 @@ return {
         },
       })
       vim.lsp.enable "ruff"
+      native_servers.ruff = true
     end
 
-    if vim.fn.executable "typescript-language-server" == 1 then vim.lsp.enable "ts_ls" end
+    if vim.fn.executable "typescript-language-server" == 1 then
+      vim.lsp.enable "ts_ls"
+      native_servers.ts_ls = true
+    end
 
+    vim.api.nvim_create_autocmd("LspAttach", {
+      group = vim.api.nvim_create_augroup("user_native_lsp_on_attach", { clear = true }),
+      desc = "Apply AstroLSP on_attach (keymaps etc.) to natively-enabled servers",
+      callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and native_servers[client.name] then astrolsp.on_attach(client, args.buf) end
+      end,
+    })
   end,
   dependencies = {
     {
@@ -80,16 +100,30 @@ return {
           python = { "ruff_organize_imports", "ruff_format" },
           -- You can customize some of the format options for the filetype (:help conform.format)
           rust = { "rustfmt" },
+          markdown = { "mdformat" },
           -- Conform will run the first available formatter
           ["_"] = { "prettier", lsp_format = "fallback" },
         },
+        formatters = {
+          mdformat = {
+            prepend_args = { "--wrap", "100" },
+          },
+        },
         default_format_opts = { timeout_ms = 5000, lsp_format = "fallback" },
         format_on_save = function(bufnr)
+          if vim.bo[bufnr].filetype == "markdown" then return end
           if vim.F.if_nil(vim.b[bufnr].autoformat, vim.g.autoformat, true) then
             return { timeout_ms = 5000, lsp_format = "fallback" }
           end
         end,
       },
+    },
+    {
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
+      opts = function(_, opts)
+        opts.ensure_installed = opts.ensure_installed or {}
+        require("astrocore").list_insert_unique(opts.ensure_installed, { "mdformat" })
+      end,
     },
     {
       "Saghen/blink.cmp",
